@@ -136,12 +136,6 @@
             <button type="button" class="btn btn-white btn-icon-excel js-excel-download" data-target-form="frmSearchGoods" data-target-list-form="frmList" data-target-list-sno="goodsNo" data-search-count="<?=$page->recode['total']?>" data-total-count="<?=$page->recode['amount']?>">엑셀다운로드</button>
         </div>
     </div>
-	 <div class="table-action">
-        <div class="pull-left">
-			검색 <strong><?=number_format($page->recode['total']);?></strong>개 상품
-            <button type="button" class="btn btn-black js-check-search-delete">검색 삭제</button>
-        </div>
-    </div>
 </form>
 <div class="text-center"><?=$page->getPage(); ?></div>
 
@@ -149,29 +143,6 @@
 <script type="text/javascript">
     <!--
     $(document).ready(function () {
-
-		// 검색 삭제 추가
-        $('button.js-check-search-delete').click(function () {
-
-            var chkCnt = <?=$page->recode['total']?>;
-
-            if (chkCnt == 0) {
-                alert('검색된 상품이 없습니다.');
-                return;
-            }
-
-            dialog_confirm('검색된 ' + chkCnt + '개 상품을  정말로 삭제하시겠습니까?\n삭제 된 상품은 [삭제상품 리스트]에서 확인 가능합니다.', function (result) {
-                if (result) {
-                    $('#frmList input[name=\'mode\']').val('search_delete_state');
-					$('#frmList').prepend("<input type='hidden' name='param' value='<?=$param?>' />");
-                    $('#frmList').attr('method', 'post');
-					//$('#frmList').attr('target', '');
-                    $('#frmList').attr('action', './goods_ps.php');
-                    $('#frmList').submit();
-                }
-            });
-
-        });
 
         // 삭제
         $('button.js-check-delete').click(function () {

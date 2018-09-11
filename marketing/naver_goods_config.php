@@ -98,10 +98,41 @@
             </tr>
             <tr>
                 <th>네이버쇼핑 노출여부</th>
-                <td colspan="3">
+                <td colspan="">
                     <label class="radio-inline"><input type="radio" name="naverFl" value="" <?=gd_isset($checked['naverFl']['']); ?> />전체</label>
                     <label class="radio-inline"><input type="radio" name="naverFl" value="y" <?=gd_isset($checked['naverFl']['y']); ?> />노출함</label>
                     <label class="radio-inline"><input type="radio" name="naverFl" value="n" <?=gd_isset($checked['naverFl']['n']); ?> />노출안함</label>
+                </td>
+				<th>공급사</th>
+                <td colspan="">
+                    
+                    <label class="radio-inline">
+                        <input type="radio" name="scmFl" value="all" <?=gd_isset($checked['scmFl']['all']); ?> onclick="$('#scmLayer').html('');"/>전체
+                    </label>
+                    
+                    <label class="radio-inline">
+                        <input type="radio" name="scmFl" value="n" <?=gd_isset($checked['scmFl']['n']); ?> onclick="$('#scmLayer').html('')" ;/>본사
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="scmFl" value="y" <?=gd_isset($checked['scmFl']['y']); ?> onclick="layer_register('scm', 'checkbox')"/>공급사
+                    </label>
+                    <label>
+                        <button type="button" class="btn btn-sm btn-gray" onclick="layer_register('scm','checkbox')">공급사 선택</button>
+                    </label>
+
+                    <div id="scmLayer" class="selected-btn-group <?=$search['scmFl'] == 'y' && !empty($search['scmNo']) ? 'active' : ''?>">
+                        <h5>선택된 공급사 : </h5>
+                        <?php if ($search['scmFl'] == 'y') {
+                            foreach ($search['scmNo'] as $k => $v) { ?>
+                                <span id="info_scm_<?= $v ?>" class="btn-group btn-group-xs">
+                                <input type="hidden" name="scmNo[]" value="<?= $v ?>"/>
+                                <input type="hidden" name="scmNoNm[]" value="<?= $search['scmNoNm'][$k] ?>"/>
+                                <span class="btn"><?= $search['scmNoNm'][$k] ?></span>
+                                <button type="button" class="btn btn-icon-delete" data-toggle="delete" data-target="#info_scm_<?= $v ?>">삭제</button>
+                                </span>
+                            <?php }
+                        } ?>
+                    </div>
                 </td>
             </tr>
             </tbody>
@@ -293,7 +324,7 @@
         // 레이어 창
 
         if (typeStr == 'scm') {
-            addParam['mode'] = 'radio';
+            if(mode != 'checkbox') addParam['mode'] = 'radio'; //튜닝 checkbox 추가 2018-09-04
             $('input:radio[name=scmFl]:input[value=y]').prop("checked", true);
         }
 
