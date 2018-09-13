@@ -1,5 +1,5 @@
-<form id="frmSort" name="frmSort" action="./delivery_ps.php" method="post">
-    <input type="hidden" name="mode" value="company_register"/>
+<form id="frmSort" name="frmSort" action="./words_ps.php" method="post">
+    <input type="hidden" name="mode" value="word_register"/>
 
     <div class="page-header js-affix">
         <h3><?php echo end($naviMenu->location);?></h3>
@@ -11,12 +11,8 @@
     </div>
 
     <div class="table-header">
-        <div class="pull-left">총 <strong><?php echo $dataCnt; ?></strong>개의 배송 업체가 등록되었습니다.</div>
+        <div class="pull-left">총 <strong><?php echo $dataCnt; ?></strong>개의 단어가 선택되었습니다..</div>
     </div>
-    <p class="notice-info">
-        “사용”으로 설정된 배송업체 중, 리스트 가장 위에 노출되는 배송업체가 주문리스트에서 배송정보 입력시 기본으로 선택됩니다.
-    </p>
-
     <div class="table-action mgb0 mgt0">
         <div class="pull-left">
             <div class="btn-group">
@@ -41,9 +37,8 @@
         <thead>
         <tr>
             <th class="width-2xs">번호</th>
-            <th class="width-2xs">배송업체번호</th>
-            <th class="width-sm">배송업체명</th>
-            <th class="">배송추적URL</th>
+            <th class="width-2xs">단어ID</th>
+            <th class="">금지단어</th>
             <th class="width-sm">사용설정</th>
             <th class="width-xs">추가/삭제</th>
         </tr>
@@ -59,33 +54,15 @@
         ?>
                 <tr class="text-center move-row<?php if ($val['useFl'] == 'n') { ?> active<?php } ?>">
                     <td>
-                        <?php echo $num; ?>
-                        <input type="hidden" name="fixFl[]" value="<?php echo $val['fixFl']; ?>"/>
-                        <input type="hidden" name="sno[]" value="<?php echo $val['sno']; ?>"/>
+                            <?php echo $num; ?>
+                            <input type="hidden" name="sno[]" value="<?php echo $val['sno']; ?>"/>
                     </td>
                     <td><?php echo $val['sno']; ?></td>
-                    <?php if($val['fixFl'] =='y') { ?>
-                        <td>
-                            <input type="hidden" name="companyName[]" value="<?=$val['companyName']?>" class="form-control"  /><?=$val['companyName']?>
-                        </td>
-                    <?php } else { ?>
-                        <td>
-                            <input type="text" name="companyName[]" value="<?=$val['companyName']?>" class="form-control"  />
-                        </td>
-                    <?php } ?>
                     <td class="text-left">
-                        <?php if($val['deliveryFl'] == 'y'){ ?>
-                            <input type="text" name="traceUrl[]" value="<?=$val['traceUrl']?>" class="form-control" />
-                        <?php } else { ?>
-                            <input type="hidden" name="traceUrl[]" value="" />
-                        <?php } ?>
+                        <input type="text" name="word[]" value="<?=$val['word']?>" class="form-control" />
                     </td>
                     <td>
-                        <?php if($val['deliveryFl'] == 'y'){ ?>
-                            <?= gd_select_box('useFl[]', 'useFl[]', $arrUseFl, null, $val['useFl']) ?>
-                        <?php } else { ?>
-                            <input type="hidden" name="useFl[]" value="y" />
-                        <?php } ?>
+                        <?= gd_select_box('useFl[]', 'useFl[]', $arrUseFl, null, $val['useFl']) ?>
                     </td>
                     <td>
                         <?php if ($num == 1) { ?>
@@ -135,10 +112,10 @@
                 form.submit();
             },
             rules: {
-                "companyName[]": "required"
+                "word[]": "required"
             },
             messages: {
-                "companyName[]": "배송업체명을 입력하세요.",
+                "word[]": "단어를 입력하세요",
             }
         });
 
@@ -249,10 +226,7 @@
         </td>
         <td></td>
         <td>
-            <input type="text" name="companyName[]" value="" class="form-control">
-        </td>
-        <td class="text-left">
-            <input type="text" name="traceUrl[]" value="" class="form-control">
+            <input type="text" name="word[]" value="" class="form-control">
         </td>
         <td>
             <select class="form-control" name="useFl[]">
