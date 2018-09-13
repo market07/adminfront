@@ -135,6 +135,18 @@
                     </div>
                 </td>
             </tr>
+            <tr>
+                <th>금지단어검색</th>
+                <td colspan="">
+                    <label class="radio-inline"><input type="radio" name="cleanWords" value="" <?=gd_isset($checked['cleanWords']['']); ?>/>전체</label>
+                    <label class="radio-inline"><input type="radio" name="cleanWords" value="y"<?=gd_isset($checked['cleanWords']['y']); ?> />클린위반단어</label>
+                </td>
+				<th>KC인증 상품</th>
+                <td colspan="">
+                    <label class="radio-inline"><input type="radio" name="kcMarks" value=""  <?=gd_isset($checked['kcMarks']['']); ?>  />전체</label>
+                    <label class="radio-inline"><input type="radio" name="kcMarks" value="y" <?=gd_isset($checked['kcMarks']['y']); ?> />KC인증 상품</label>
+                </td>
+            </tr>
             </tbody>
         </table>
     </div>
