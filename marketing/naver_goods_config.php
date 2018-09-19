@@ -147,6 +147,13 @@
                     <label class="radio-inline"><input type="radio" name="kcMarks" value="y" <?=gd_isset($checked['kcMarks']['y']); ?> />KC인증 상품</label>
                 </td>
             </tr>
+            <tr>
+                <th>깨진이미지 검색</th>
+                <td colspan="">
+                    <label class="radio-inline"><input type="radio" name="brokenImage" value="" <?=gd_isset($checked['brokenImage']['']); ?>/>전체</label>
+                    <label class="radio-inline"><input type="radio" name="brokenImage" value="y"<?=gd_isset($checked['brokenImage']['y']); ?> />깨진이미지</label>
+                </td>
+            </tr>
             </tbody>
         </table>
     </div>
