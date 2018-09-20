@@ -5502,6 +5502,7 @@ for($i=0;$i<=10;$i++){
         </table>
     </div> 
 
+   <?php if (gd_is_provider() === false) { //튜닝 공급사인 경우 메뉴 숨김 2018-09-12 ?>
    <div class="table-title gd-help-manual">
         네이버쇼핑 EP 3.0 정보 등록
         <span class="depth-toggle"><button type="button" class="btn btn-sm btn-link bold depth-toggle-button" depth-name="naverEp"><span>닫힘</span></button></span>
@@ -5628,6 +5629,7 @@ for($i=0;$i<=10;$i++){
             </tr>
         </table>
     </div> 
+	<?php } ?>
 
     <div class="table-title gd-help-manual">
         관리자 메모
