@@ -153,6 +153,28 @@
                     <label class="radio-inline"><input type="radio" name="brokenImage" value="" <?=gd_isset($checked['brokenImage']['']); ?>/>전체</label>
                     <label class="radio-inline"><input type="radio" name="brokenImage" value="y"<?=gd_isset($checked['brokenImage']['y']); ?> />깨진이미지</label>
                 </td>
+                <th>판매가</th>
+                <td colspan="">
+                    <div class="form-inline">
+                        <input type="text" class="form-control" name="goodsPriceLow" 
+                            value="<?= $search['goodsPriceLow'] ?>"/>  원 ~
+                        <input type="text" class="form-control" name="goodsPriceHigh" 
+                            value="<?= $search['goodsPriceHigh'] ?>"/>
+                        원
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>판매수수료</th>
+                <td colspan="">
+                    <div class="form-inline">
+                        <input type="text" class="form-control" name="goodsCommissionLow" 
+                            value="<?= $search['goodsCommissionLow'] ?>"/>  % ~
+                        <input type="text" class="form-control" name="goodsCommissionHigh" 
+                            value="<?= $search['goodsCommissionHigh'] ?>"/>
+                        %
+                    </div>
+                </td>
             </tr>
             </tbody>
         </table>
