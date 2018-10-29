@@ -175,6 +175,11 @@
                         %
                     </div>
                 </td>
+                <th>가격금지위반상품</th>
+                <td colspan="">
+                    <label class="radio-inline"><input type="radio" name="illegalPrice" value="" <?=gd_isset($checked['illegalPrice']['']); ?>/>전체</label>
+                    <label class="radio-inline"><input type="radio" name="illegalPrice" value="y"<?=gd_isset($checked['illegalPrice']['y']); ?> />가격금지위반상품</label>
+                </td>
             </tr>
             </tbody>
         </table>
