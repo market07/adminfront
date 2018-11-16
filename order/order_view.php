@@ -954,7 +954,7 @@
                                     }
                                 }
                             }
-                            // 현금영수증인 경우
+                            //현금영수증인 경우
                             else if (gd_isset($data['receiptFl']) == 'r') {
                                 // 현금영수증 신청 정보
                                 if ($data['cash']['statusFl'] == 'r') {
