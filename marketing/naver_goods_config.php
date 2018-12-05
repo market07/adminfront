@@ -188,6 +188,38 @@
                     <label class="radio-inline"><input type="radio" name="addGoodsFilter" value="y"<?=gd_isset($checked['addGoodsFilter']['y']); ?> />추가상품적용상품</label>
                 </td>
             </tr>
+            <tr>
+                <th>일자</th>
+                <td class="form-inline" colspan="3">
+                    <select name="searchDateFl" class="form-control">
+                        <option value="regDt" <?php if ($search['searchDateFl'] == 'regDt') echo 'selected' ?>>
+                            등록일
+                        </option>
+                        <option value="modDt" <?php if ($search['searchDateFl'] == 'modDt') echo 'selected' ?>>
+                            수정일
+                        </option>
+                    </select>
+
+                    <div class="input-group js-datepicker">
+                        <input type="text" class="form-control width-xs" name="searchDate[]"
+                               value="<?= $search['searchDate'][0]; ?>">
+                        <span class="input-group-addon">
+                                        <span class="btn-icon-calendar">
+                                        </span>
+                                    </span>
+                    </div>
+                    ~
+                    <div class="input-group js-datepicker">
+                        <input type="text" class="form-control width-xs" name="searchDate[]"
+                               value="<?= $search['searchDate'][1]; ?>">
+                        <span class="input-group-addon">
+                                        <span class="btn-icon-calendar">
+                                        </span>
+                                    </span>
+                    </div>
+                    <?= gd_search_date(gd_isset($search['searchPeriod'], 6), 'searchDate', false) ?>
+                </td>
+            </tr>
             </tbody>
         </table>
     </div>
