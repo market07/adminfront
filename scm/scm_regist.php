@@ -152,7 +152,7 @@
         </tr>
 		<tr>
             <th class="require">
-                Supplier Type
+                수수료 정보
             </th>
             <td class="form-inline">
                카테고리 조정&nbsp; <input type="radio" name="supplierType" value="A" <?= $getData['supplierType'] == 'A' ? 'checked' : ""; ?>/>&nbsp;
@@ -160,7 +160,7 @@
                고정수수료&nbsp; <input type="radio" name="supplierType" value="C" <?= $getData['supplierType'] == 'C' ? 'checked' : "";  ?>/>&nbsp;
             </td>
             <th class="require">
-                Product Commission
+                조정 수수료
             </th>
             <td class="form-inline">
                 <input type="text" name="scmProCom" value="<?= ($getData['supplierType'] != 'A' && $getData['supplierType'] != 'C') ? '0' : $getData['scmProCom'];  ?>" class="form-control width-sm" <?= ($getData['supplierType'] != 'A' && $getData['supplierType'] != 'C') ? 'disabled' : "";  ?>/>%
@@ -196,13 +196,20 @@
             <th>
                 상품등록권한
             </th>
-            <td colspan="3">
+            <td class="form-inline">
                 <label class="radio-inline">
                     <input type="radio" name="scmPermissionInsert" value="a" <?= $checked['scmPermissionInsert']['a'] ?> />자동승인
                 </label>
                 <label class="radio-inline">
                     <input type="radio" name="scmPermissionInsert" value="c" <?= $checked['scmPermissionInsert']['c'] ?> />관리자승인
                 </label>
+            </td>
+            <th class="require">
+                정산타입
+            </th>
+            <td class="form-inline">
+               주정산&nbsp; <input type="radio" name="calculateType" value="w" <?= $getData['calculateType'] == 'w' ? 'checked' : ""; ?>/>&nbsp;
+               월정산&nbsp; <input type="radio" name="calculateType" value="m" <?= ($getData['calculateType'] != 'w') ? 'checked' : "";  ?>/>&nbsp;
             </td>
         </tr>
         <tr>
@@ -502,6 +509,96 @@
         ?>
         </tbody>
     </table>
+    <div class="table-title">
+        계좌 정보
+    </div>
+    <table id="table_account" class="table table-cols">
+        <colgroup>
+            <col class="width-sm"/>
+            <col class="width-lg"/>
+            <col class="width-sm"/>
+            <col class="width-2xl"/>
+            <col class="width-sm"/>
+            <col/>
+        </colgroup>
+        <tbody>
+        <tr>
+            <th>
+                은행
+            </th>
+            <th>
+                계좌번호
+            </th>
+            <th>
+                예금주
+            </th>
+            <th>
+                메모
+            </th>
+            <th>
+                추가/삭제
+            </th>
+        </tr>
+        <?php
+        if ($getData['account']) {
+            $accountNum = 2;
+            foreach ($getData['account'] as $key => $val) {
+                $selected['accountType'][$key][$getData['account'][$key]->accountType] = 'selected="selected"';
+                ?>
+                <tr id="tr_account_<?= $accountNum ?>">
+                    <td>
+                        <?= gd_select_box('accountType[]', 'accountType[]', $account, null, gd_isset($getData['account'][$key]->accountType), '=은행 선택='); ?>
+                    </td>
+                    <td>
+                        <input type="text" name="accountNum[]" value="<?= $getData['account'][$key]->accountNum ?>" class="form-control width100p" maxlength="30"/>
+                    </td>
+                    <td>
+                        <input type="text" name="accountName[]" value="<?= $getData['account'][$key]->accountName ?>" class="form-control width100p" maxlength="30"/>
+                    </td>
+                    <td>
+                        <textarea name="accountMemo[]" class="form-control width100p" maxlength="250"><?=$getData['account'][$key]->accountMemo;?></textarea>
+                    </td>
+                    <td>
+                        <?php
+                        if ($accountNum == 2) {
+                            ?>
+                            <button type="button" id="btn_account_add" class="btn btn-gray btn-sm">추가</button>
+                            <?php
+                        } else {
+                            ?>
+                            <button type="button" class="btn_account_del btn btn-gray btn-sm">삭제</button>
+                            <?php
+                        }
+                        ?>
+                    </td>
+                </tr>
+                <?php
+                $accountNum++;
+            }
+        } else {
+            ?>
+            <tr id="tr_account_2">
+                <td>
+                    <?= gd_select_box('accountType[]', 'accountType[]', $account, null, null, '=은행 선택='); ?>
+                </td>
+                <td>
+                    <input type="text" name="accountNum[]" value="" class="form-control width100p" maxlength="30"/>
+                </td>
+                <td>
+                    <input type="text" name="accountName[]" value="" class="form-control width100p" maxlength="30"/>
+                </td>
+                <td>
+                    <textarea name="accountMemo[]" class="form-control width100p" maxlength="250"></textarea>
+                </td>
+                <td>
+                    <button type="button" id="btn_account_add" class="btn btn-gray btn-sm">추가</button>
+                </td>
+            </tr>
+            <?php
+        }
+        ?>
+        </tbody>
+    </table>
     <div class="text-center">
         <input type="submit" value="저장" class="btn btn-red btn-lg"/>
     </div>
@@ -510,10 +607,39 @@
 <script type="text/javascript">
     <!--
     var trCount = $('#table_staff tr').length;
+    var trAccountCount = $('#table_account tr').length;
+    var _select, _accNum, _accName, _memo;
     $(document).ready(function () {
         $("#frmScm").validate({
             dialog: false,
             submitHandler: function (form) {
+                var checkAccount = false;
+                var _trAccountCount = $('#table_account tr[id^=tr_account]').length;
+                $('#table_account tr[id^=tr_account]').each( function( key ) {
+                    _select = $(this).find('select').val();
+                    _accNum = $.trim($(this).find('input[name^=accountNum]').val());
+                    _accName = $.trim($(this).find('input[name^=accountName]').val());
+                    _memo = $.trim($(this).find('textarea[name^=accountMemo]').val());
+                    if ( ( _select == '' && _accNum == '' && _accName == '' && _memo == '') || ( _select != '' && _accNum != '' && _accName != '' ) ) {
+                        if( key == _trAccountCount - 1 ) {
+                            checkAccount = true;
+                        }
+                        return true;
+                    } else {
+                        if ( _select == '' ) {
+                            alert("은행을 선택해 주세요.");
+                        } else if ( _accNum == '' ) {
+                            alert("계좌번호를 입력해 주세요.");
+                        } else if ( _accName == '' ) {
+                            alert("예금주를 입력해 주세요.");
+                        }
+                        checkAccount = false;
+                        return false;
+                    }
+                });
+                if ( !checkAccount ) {
+                    return false;
+                }
                 <?php
                 if ($getData['mode'] == 'modifyScmModify') {
                 ?>
@@ -712,6 +838,17 @@
         $(".btn_staff_del").click(function (e) {
             $(this).closest('tr').remove();
         });
+        $(document).on('keydown focusout', 'input[name^=accountNum]', function(e){
+            $(this).val($(this).val().replace(/[^A-Za-z0-9\-]/g,""));
+        });
+        // 계좌 정보 추가
+        $("#btn_account_add").click(function (e) {
+            accountAdd();
+        });
+        // 계좌 정보 삭제
+        $(".btn_account_del").click(function (e) {
+            $(this).closest('tr').remove();
+        });
         // input radio 값을 input text 에 넣기
         $(document).on('change', '#frmScm input:checkbox', function (e) {
             if ($(this).prop('checked') == true) {
@@ -740,6 +877,27 @@
         $('#table_staff').append(addStaff);
         // 담당자 정보 삭제(동적 담당자 삭제)
         $('#btn_staff_del_' + trCount).on('click', function (e) {
+            $(this).closest('tr').remove();
+        });        		    
+    }
+    function accountAdd() {
+        var chkTrCount = ($('#table_account tr').length) - 2; // + 추가 1개 - 기본 tr 2개
+        trAccountCount = trAccountCount + 1;
+        if ((chkTrCount + 1) >= 5) {
+            alert('계좌 정보는 5개가 제한 입니다.');
+            return false;
+        }
+        var selectType = '<?= gd_select_box("accountType[]", "accountType[]", $account, null, null, "=은행 선택="); ?>';
+        var addAccount = '<tr id="tr_account_' + trAccountCount + '">';
+        addAccount += '<td>'+selectType+'</td>';
+        addAccount += '<td><input type="text" name="accountNum[]" value="" class="form-control width100p" maxlength="30"/></td>';
+        addAccount += '<td><input type="text" name="accountName[]" value="" class="form-control width100p" maxlength="30"/></td>';
+        addAccount += '<td><textarea name="accountMemo[]" class="form-control width100p" maxlength="250"></textarea></td>';
+        addAccount += '<td><button type="button" id="btn_account_del_' + trAccountCount + '" class="btn btn-gray btn-sm">삭제</button></td>';
+        addAccount += '</tr>';
+        $('#table_account').append(addAccount);
+        // 계좌 정보 삭제
+        $('#btn_account_del_' + trAccountCount).on('click', function (e) {
             $(this).closest('tr').remove();
         });
     }

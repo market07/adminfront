@@ -187,6 +187,10 @@
                     <label class="radio-inline"><input type="radio" name="addGoodsFilter" value="" <?=gd_isset($checked['addGoodsFilter']['']); ?>/>전체</label>
                     <label class="radio-inline"><input type="radio" name="addGoodsFilter" value="y"<?=gd_isset($checked['addGoodsFilter']['y']); ?> />추가상품적용상품</label>
                 </td>
+                <th>중복상품삭제</th>
+                <td>
+                    <button id="erase-duplicates">중복상품삭제</button>
+                </td>
             </tr>
             <tr>
                 <th>일자</th>
@@ -345,10 +349,35 @@
     </div>
 </form>
 
+<script>
+$(function(){
+    $('#erase-duplicates').click(function(e) {
+        $.ajax({
+            type: 'POST',
+            url: '../share/duplicate_product.php',
+            async: false,
+            success: function(data) {
+                console.log(data);
+                if (data.response =='success') {
+                    alert("중복상품제거 성공");
+                } else {
+                    alert(data.message);
+                }
+            },
+            error: function() {
+                alert(failMsg);
+                return false;
+            }
+        });
+    });
+})
+</script>
+
 <script type="text/javascript">
     <!--
 
     $(document).ready(function(){
+
 
         $(".js-layer-naver-stats").click(function(e){
             layer_add_info('naver_stats');
