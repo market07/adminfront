@@ -3145,6 +3145,10 @@ for($i=0;$i<=10;$i++){
                         <label class="radio-inline" title="상품명을 상품 출력하는 위치에 따라서 다르게 작성시에는 &quot;확장 상품명&quot;을 선택하세요!">
                             <input type="radio" name="goodsNmFl" value="e" onclick="display_toggle('goodsNmExt','show');" <?=gd_isset($checked['goodsNmFl']['e']); ?> />확장 상품명
                         </label>
+                        상품원본링크
+                        <?php
+                            echo '<a href="' .$data['goodsUrl'].'" target="_blank" class="btn btn-sm btn-white btn-icon-plus">'.$data['goodsUrl'].'</a>';
+                        ?>
                     </div>
                     <table class="table table-cols">
                         <colgroup>
